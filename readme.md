@@ -20,4 +20,4 @@ The key differentiator for AppointMe lies in its creator-first approach. It’s 
 Unique & Innovative Features:
 🔔 Automatic email reminders to reduce missed appointments
 🎁 Built-in promotion tools, including discounts and coupons
-📸 Instagram profile integration, allowing clients to see the creator’s work before booking
+📸 Instagram profile integration, allowing clients to see the creator’s work before booking.
