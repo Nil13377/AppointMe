@@ -28,4 +28,9 @@ The key differentiator for **AppointMe** lies in its **creator-first approach**.
 ## 🎯 Unique & Innovative Features:
 - 🔔 Automatic email reminders to reduce missed appointments  
 - 🎁 Built-in promotion tools, including discounts and coupons  
-- 📸 Instagram profile integration, allowing clients to see the creator’s work before booking  
+- 📸 Instagram profile integration, allowing clients to see the creator’s work before booking
+
+
+# 💲 Pricing compared to competitors.
+
+Compared to other similar websites **AppointMe** will stand out because of its pricing. Competitros like **Calendy**, **Booksy**, **Squareup** and others offer free plans but they lack features and are more like a free trial before buying the premium plan. the premium plans of competitors mostly start around 25€ and sometimes even this wont unlock all the features and purchase of an even more expensive plan is required to unlock every feature. **AppointMe** will have only one plan with all the features for a cheap price of 8€ a month. The plan will start with a 1 month free trial where users can cancel the plan if they dont like it, after that all the features they will need will be accesible for only 8€ monthly. With this pricing **AppointMe** can stand out from the competition.
