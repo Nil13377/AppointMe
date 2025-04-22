@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AppointMe</title>
+    <link rel="stylesheet" href="/static/home.css"> <!-- Shared styles -->
+    <link rel="stylesheet" href="/static/login.css"> <!-- Login-specific styles -->
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <h1>AppointMe</h1>
+            <p class="subheader">Your personal booking assistant</p>
+        </div>
+        <nav class="header-right">
+            <a href="/">Home</a>
+        </nav>
+    </header>
+
+    <main class="content">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <section class="login-form">
+            <h2>Login</h2>
+            <form action="/login" method="POST">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                
+                <button type="submit" class="cta-button">Login</button>
+            </form>
+            <p class="register-link">Don't have an account? <a href="/register">Register here</a>.</p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 AppointMe. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,89 @@
+/* Flash message container */
+.flash-messages {
+    margin: 1rem auto;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Flash message styling */
+.flash-message {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ff4d4d; /* Red for error messages */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInSlideDown 0.5s ease forwards;
+}
+
+/* Animation for flash messages */
+@keyframes fadeInSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Login form styles */
+.login-form {
+    margin: 0 auto;
+    max-width: 400px;
+    background: #ffffff;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-form h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #007aff;
+}
+
+.login-form label {
+    display: block;
+    font-size: 1rem;
+    margin: 1rem 0 0.5rem;
+    text-align: left;
+    color: #333;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    box-sizing: border-box;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #007aff;
+    box-shadow: 0 0 4px rgba(0, 122, 255, 0.5);
+}
+
+.register-link {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.register-link a {
+    color: #007aff;
+    text-decoration: none;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
