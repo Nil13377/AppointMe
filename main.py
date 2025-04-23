@@ -66,5 +66,26 @@ def login():
             return redirect(url_for("login"))
     return render_template("login.html")
 
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        name = request.form.get("name")
+        surname = request.form.get("surname")
+        email = request.form.get("email")
+        password = request.form.get("password")
+        if db.session.query(User).filter_by(email = email).first():
+            flash("Email already exists! Use a diffrent email or login", "error")
+            return redirect(url_for("register"))
+        else:
+            hashed = generate_password_hash(password)
+            new_user = User(name = name, surname = surname, email = email, password = hashed)
+            db.session.add(new_user)
+            db.session.commit()
+            flash("Registration complete! You can login now", "success")
+            return redirect(url_for("login"))
+    return render_template("register.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)

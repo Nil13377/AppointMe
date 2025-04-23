@@ -5,8 +5,8 @@
     text-align: center;
 }
 
-/* Flash message styling */
-.flash-message {
+/* Flash message styling for error messages */
+.flash-message.error {
     padding: 1rem;
     margin-bottom: 1rem;
     border-radius: 8px;
@@ -14,6 +14,21 @@
     font-weight: bold;
     color: #fff;
     background-color: #ff4d4d; /* Red for error messages */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInSlideDown 0.5s ease forwards;
+}
+
+/* Flash message styling for success messages */
+.flash-message.success {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #4caf50; /* Green for success messages */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     opacity: 0;
     transform: translateY(-20px);
