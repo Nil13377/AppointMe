@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - AppointMe</title>
+    <link rel="stylesheet" href="/static/home.css"> <!-- Shared styles -->
+    <link rel="stylesheet" href="/static/login.css"> <!-- Flash message styles -->
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <h1>AppointMe</h1>
+            <p class="subheader">Your personal booking assistant</p>
+        </div>
+        <nav class="header-right">
+            <a href="/">Home</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main class="content">
+        <!-- Flash message section -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <section class="profile-section">
+            <h2>Your Profile</h2>
+            <div class="profile-container">
+                <div class="profile-picture">
+                    <img src="{{ "/static/images/" ~ session["user_pfp"] if session["user_pfp"] else "/static/images/default.png" }}" alt="Profile Picture">
+                    <form action="/profile" method="POST" enctype="multipart/form-data">
+                        <label for="profile-picture">Change Profile Picture</label>
+                        <input type="file" id="profile-picture" name="profile_picture" accept="image/*">
+                        <button type="submit" class="cta-button">Upload</button>
+                    </form>
+                </div>
+                <div class="profile-details">
+                    <p><strong>Name:</strong> {{ session["user_name"] }} {{ session["user_surname"] }}</p>
+                    <p><strong>Email:</strong> {{ session["user_email"] }}</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 AppointMe. All rights reserved.</p>
+    </footer>
+</body>
+</html>

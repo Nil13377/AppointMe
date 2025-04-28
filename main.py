@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, flash, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from os import path
 
 app = Flask(__name__)
 app.secret_key = "77F92BD4AEE93FFBAEDFC3F15D848"
@@ -17,6 +18,7 @@ class User(db.Model):
     password = db.Column(db.String(200), nullable = False)
     name = db.Column(db.String(100), nullable = False)
     surname = db.Column(db.String(100), nullable = False)
+    pfp = db.Column(db.String(200))
 
 class Business(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -42,6 +44,16 @@ class Availability(db.Model):
 with app.app_context():
     db.create_all()
 
+allowed_extensions = ["jpg", "png", "gif", "jpeg"]
+
+def allowed_img(filename):
+
+    if filename.rsplit(".", 1)[1].lower() in allowed_extensions:
+        return filename.rsplit(".", 1)[1].lower()
+    
+    else:
+        return False
+
 
 @app.route("/")
 def home():
@@ -60,23 +72,30 @@ def login():
             session["user_email"] = user.email
             session["user_name"] = user.name
             session["user_surname"] = user.surname
+            if user.pfp:
+                session["user_pfp"] = user.pfp
             return redirect(url_for("profile"))
+        
         else:
             flash("Email or password are incorect! Try again", "error")
             return redirect(url_for("login"))
+        
     return render_template("login.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+
     if request.method == "POST":
         name = request.form.get("name")
         surname = request.form.get("surname")
         email = request.form.get("email")
         password = request.form.get("password")
+
         if db.session.query(User).filter_by(email = email).first():
             flash("Email already exists! Use a diffrent email or login", "error")
             return redirect(url_for("register"))
+        
         else:
             hashed = generate_password_hash(password)
             new_user = User(name = name, surname = surname, email = email, password = hashed)
@@ -84,8 +103,45 @@ def register():
             db.session.commit()
             flash("Registration complete! You can login now", "success")
             return redirect(url_for("login"))
+        
     return render_template("register.html")
 
+@app.route("/profile", methods=["GET", "POST"])
+def profile():
 
+    if session.get("user_id"):
+
+        user_id = session.get("user_id")
+
+        if request.method == "POST":
+            image = request.files.get("profile_picture")
+
+            if image:
+
+                if allowed_img(image.filename):
+                    extension = allowed_img(image.filename)
+                    new_name = f"user-{user_id}-profilepicture.{extension}"
+                    save_path = path.join("static/images", new_name)
+                    image.save(save_path)
+
+                    user = User.query.get(user_id)
+                    user.pfp = new_name
+                    db.session.commit()
+                    session["user_pfp"] = user.pfp
+                    
+                    flash("Image uploaded successfuly", "success")
+                    return redirect(url_for("profile"))
+                else:
+                    flash("Invalid file extension!", "error")
+                    return redirect(url_for("profile"))
+                
+            else:
+                flash("Upload an image before submitting!", "error")
+
+        return render_template("profile.html")
+    else:
+        flash("Login to view the profile section!", "error")
+        return redirect(url_for("login"))
+    
 if __name__ == "__main__":
     app.run(debug=True)
