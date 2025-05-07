@@ -35,7 +35,7 @@
             <h2>Your Profile</h2>
             <div class="profile-container">
                 <div class="profile-picture">
-                    <img src="{{ "/static/images/" ~ session["user_pfp"] if session["user_pfp"] else "/static/images/default.png" }}" alt="Profile Picture">
+                    <img src="{{ '/static/images/' ~ session['user_pfp'] if session['user_pfp'] else '/static/images/default.png' }}" alt="Profile Picture">
                     <form action="/profile" method="POST" enctype="multipart/form-data">
                         <label for="profile-picture">Change Profile Picture</label>
                         <input type="file" id="profile-picture" name="profile_picture" accept="image/*">
@@ -48,6 +48,24 @@
                 </div>
             </div>
         </section>
+
+        <!-- Business Section -->
+        {% if business %}
+        <section class="business-section">
+            <h2>Your Business</h2>
+            <div class="business-details">
+                <p><strong>Business Name:</strong> {{ business.name }}</p>
+                <p><strong>Description:</strong> {{ business.description }}</p>
+                <a href="/business-dashboard" class="cta-button">View Business Profile</a>
+            </div>
+        </section>
+        {% else %}
+        <section class="add-business-section">
+            <h2>Create Your Business</h2>
+            <p>You currently have no registered business. Click below to create one.</p>
+            <a href="/create-business" class="cta-button">Create Business</a>
+        </section>
+        {% endif %}
     </main>
 
     <footer class="footer">

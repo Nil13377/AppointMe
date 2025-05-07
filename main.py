@@ -112,7 +112,8 @@ def profile():
     if session.get("user_id"):
 
         user_id = session.get("user_id")
-
+        business = Business.query.filter_by(user_id=user_id).first()
+ 
         if request.method == "POST":
             image = request.files.get("profile_picture")
 
@@ -138,10 +139,48 @@ def profile():
             else:
                 flash("Upload an image before submitting!", "error")
 
-        return render_template("profile.html")
+        return render_template("profile.html", business=business)
     else:
         flash("Login to view the profile section!", "error")
         return redirect(url_for("login"))
     
+@app.route("/create-business", methods=["GET", "POST"])
+def create_business():
+     
+    if session.get("user_id"):
+
+        user_id = session.get("user_id")
+
+        if request.method == "POST":
+
+            business_name = request.form.get("business_name")
+            business_description = request.form.get("business_description")
+            new_business = Business(user_id=user_id, name=business_name, description=business_description)
+            db.session.add(new_business)
+            db.session.commit()
+            business_id = new_business.id
+
+            services = request.form.getlist("services[]")
+            durations = request.form.getlist("durations[]")
+            prices = request.form.getlist("prices[]")
+            for i in range(len(services)):
+                new_service = Services(business_id=business_id, name=services[i], duration=int(durations[i]), price=int(prices[i]))
+                db.session.add(new_service)
+            db.session.commit()
+
+            flash("Your business and services were added successfuly!", "success")
+            return redirect(url_for("profile"))
+
+        return render_template("create_business.html")
+    else:
+        flash("Login to view the create business section!", "error")
+        return redirect(url_for("login"))
+    
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("You have been logged out successfuly", "success")
+    return redirect(url_for("login"))
+
 if __name__ == "__main__":
     app.run(debug=True)

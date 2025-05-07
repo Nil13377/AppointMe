@@ -1,7 +1,7 @@
 /* Flash message container */
 .flash-messages {
     margin: 1rem auto;
-    max-width: 400px;
+    max-width: 600px;
     text-align: center;
 }
 
@@ -103,14 +103,14 @@
     text-decoration: underline;
 }
 
-/* Profile section styles */
-.profile-section {
+/* Profile Section Styles */
+.profile-section, .business-section, .add-business-section {
     margin: 2rem auto;
     max-width: 600px;
     background: #ffffff;
     padding: 2rem;
     border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
@@ -126,7 +126,8 @@
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #007aff;
+    border: 3px solid #007aff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile-picture form {
@@ -141,4 +142,35 @@
 
 .profile-details strong {
     color: #007aff;
+}
+
+/* Business Section Styles */
+.business-details p, .add-business-section p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    color: #333;
+}
+
+.business-section h2, .add-business-section h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #007aff;
+}
+
+.add-business-section a, .business-section a {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #007aff;
+    border: none;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-business-section a:hover, .business-section a:hover {
+    background-color: #005bb5;
+
 }

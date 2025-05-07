@@ -13,8 +13,17 @@
             <p class="subheader">Your personal booking assistant</p>
         </div>
         <nav class="header-right">
-            <a href="/login">Login/Register</a>
-            <!-- Add more links here -->
+            <!-- Show Login/Register if user is not logged in -->
+            {% if not session.get("user_id") %}
+            <a href="/login" class="login-button">Login/Register</a>
+            {% endif %}
+
+            <!-- Show Profile button with profile picture if user is logged in -->
+            {% if session.get("user_id") %}
+            <a href="/profile" class="profile-button">
+                <img src="{{ '/static/images/' ~ session['user_pfp'] if session['user_pfp'] else '/static/images/default.png' }}" alt="Profile Picture">
+            </a>
+            {% endif %}
         </nav>
     </header>
 

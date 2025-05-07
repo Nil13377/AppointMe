@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Business - AppointMe</title>
+    <link rel="stylesheet" href="/static/create_business.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <h1>AppointMe</h1>
+            <p class="subheader">Your personal booking assistant</p>
+        </div>
+        <nav class="header-right">
+            <a href="/profile" class="back-button">Back to Profile</a>
+        </nav>
+    </header>
+
+    <main class="content">
+        <section class="create-business-section">
+            <h2>Create Your Business</h2>
+            <form action="/create-business" method="POST">
+                <label for="business-name">Business Name</label>
+                <input type="text" id="business-name" name="business_name" placeholder="Enter your business name" required>
+
+                <label for="business-description">Business Description</label>
+                <textarea id="business-description" name="business_description" placeholder="Enter a short description of your business" required></textarea>
+
+                <div class="services-section">
+                    <h3>Services</h3>
+                    <div id="services-container">
+                        <div class="service-item">
+                            <input type="text" name="services[]" placeholder="Enter service name" required>
+                            <input type="number" name="durations[]" placeholder="Duration (minutes)" required>
+                            <input type="number" name="prices[]" placeholder="Price (€)" required>
+                        </div>
+                    </div>
+                    <button type="button" id="add-service-button" class="add-service-button">+ Add Service</button>
+                </div>
+
+                <button type="submit" class="cta-button">Create Business</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 AppointMe. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript to dynamically add service fields
+        document.getElementById('add-service-button').addEventListener('click', function () {
+            const container = document.getElementById('services-container');
+            const serviceItem = document.createElement('div');
+            serviceItem.classList.add('service-item');
+            serviceItem.innerHTML = `
+                <input type="text" name="services[]" placeholder="Enter service name" required>
+                <input type="number" name="durations[]" placeholder="Duration (minutes)" required>
+                <input type="number" name="prices[]" placeholder="Price (€)" required>
+            `;
+            container.appendChild(serviceItem);
+        });
+    </script>
+</body>
+</html>
