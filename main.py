@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, flash, redirect, url_for, session
+from flask import Flask, render_template, request, flash, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from os import path
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = "77F92BD4AEE93FFBAEDFC3F15D848"
@@ -106,6 +107,12 @@ def register():
         
     return render_template("register.html")
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    flash("You have been logged out successfuly", "success")
+    return redirect(url_for("login"))
+
 @app.route("/profile", methods=["GET", "POST"])
 def profile():
 
@@ -176,11 +183,64 @@ def create_business():
         flash("Login to view the create business section!", "error")
         return redirect(url_for("login"))
     
-@app.route("/logout")
-def logout():
-    session.clear()
-    flash("You have been logged out successfuly", "success")
-    return redirect(url_for("login"))
+@app.route("/business-dashboard", methods=["GET", "POST"])
+def business_dashboard():
+    if not session.get("user_id"):
+        flash("Login required!", "error")
+        return redirect(url_for("login"))
+
+    user_id = session.get("user_id")
+    business = Business.query.filter_by(user_id=user_id).first()
+    if not business:
+        flash("Create a business to view the business dashboard", "error")
+        return redirect(url_for("profile"))
+
+    if request.method == "POST":
+        date_str = request.form.get("date")
+        start_time_str = request.form.get("start_time")
+        end_time_str = request.form.get("end_time")
+        try:
+            date = datetime.strptime(date_str, "%Y-%m-%d").date()
+            start_time = datetime.strptime(start_time_str, "%H:%M").time()
+            end_time = datetime.strptime(end_time_str, "%H:%M").time()
+        except Exception:
+            flash("Invalid date or time format!", "error")
+            return redirect(url_for("business_dashboard"))
+
+        new_avail = Availability(
+            business_id=business.id,
+            date=date,
+            start_time=start_time,
+            end_time=end_time,
+            booked=False
+        )
+        db.session.add(new_avail)
+        db.session.commit()
+        flash("Availability added!", "success")
+        return redirect(url_for("business_dashboard"))
+
+    return render_template("business_dashboard.html")
+
+@app.route("/get-availability")
+def get_availability():
+    if not session.get("user_id"):
+        return jsonify([])
+    user_id = session.get("user_id")
+    business = Business.query.filter_by(user_id=user_id).first()
+    if not business:
+        return jsonify([])
+    availabilities = Availability.query.filter_by(business_id=business.id).all()
+    events = []
+    for avail in availabilities:
+        events.append({
+            "id": avail.id,
+            "title": "Booked" if avail.booked else "Free",
+            "start": f"{avail.date}T{avail.start_time}",
+            "end": f"{avail.date}T{avail.end_time}",
+            "color": "#ff4d4d" if avail.booked else "#4caf50"
+        })
+    return jsonify(events)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

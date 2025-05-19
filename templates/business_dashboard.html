@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Dashboard - AppointMe</title>
+    <link rel="stylesheet" href="/static/home.css">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+    <style>
+      .calendar-section {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        padding: 2rem;
+        max-width: 900px;
+        margin: 2rem auto;
+      }
+      #calendar {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+      /* Modal styles */
+      #availability-modal {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        background: rgba(0,0,0,0.4);
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+      #availability-modal .modal-content {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        min-width: 300px;
+        text-align: center;
+        position: relative;
+      }
+      #availability-modal label {
+        display: block;
+        margin: 1rem 0 0.5rem;
+      }
+      #availability-modal input[type="time"] {
+        margin-bottom: 1rem;
+      }
+      #availability-modal .cta-button {
+        margin-right: 1rem;
+      }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <h1>AppointMe</h1>
+            <p class="subheader">Your personal booking assistant</p>
+        </div>
+        <nav class="header-right">
+            <a href="/profile" class="profile-button">
+                <img src="{{ '/static/images/' ~ session['user_pfp'] if session['user_pfp'] else '/static/images/default.png' }}" alt="Profile Picture">
+            </a>
+        </nav>
+    </header>
+
+    <main class="content">
+        <section class="calendar-section">
+            <h2 style="text-align:center; color:#007aff;">Business Calendar</h2>
+            <div id='calendar'></div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 AppointMe. All rights reserved.</p>
+    </footer>
+
+    <!-- Modal for adding availability -->
+    <div id="availability-modal">
+      <div class="modal-content">
+        <h3>Add Availability</h3>
+        <form id="availability-form" method="POST" action="/business-dashboard">
+          <input type="hidden" name="date" id="modal-date">
+          <label>Start Time: <input type="time" name="start_time" required></label>
+          <label>End Time: <input type="time" name="end_time" required></label>
+          <button type="submit" class="cta-button">Add</button>
+          <button type="button" id="close-modal" class="cta-button" style="background:#ccc; color:#333;">Cancel</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          events: '/get-availability',
+          dateClick: function(info) {
+            document.getElementById('modal-date').value = info.dateStr;
+            document.getElementById('availability-modal').style.display = 'flex';
+          }
+        });
+        calendar.render();
+
+        // Modal close logic
+        document.getElementById('close-modal').onclick = function() {
+          document.getElementById('availability-modal').style.display = 'none';
+        };
+        document.getElementById('availability-modal').onclick = function(e) {
+          if (e.target === this) this.style.display = 'none';
+        };
+      });
+    </script>
+</body>
+</html>
