@@ -26,6 +26,7 @@ class Business(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     name = db.Column(db.String(100), nullable = False)
     description = db.Column(db.String(200))
+    instagram = db.Column(db.String(200))
 
 class Services(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -41,6 +42,17 @@ class Availability(db.Model):
     start_time = db.Column(db.Time, nullable = False)
     end_time = db.Column(db.Time, nullable = False)
     booked = db.Column(db.Boolean, nullable = False)
+
+class Customer(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    availability_id = db.Column(db.Integer, db.ForeignKey("availability.id"))
+    email = db.Column(db.String(100), nullable = False, unique = True)
+    name = db.Column(db.String(100), nullable = False)
+    surname = db.Column(db.String(100), nullable = False)
+    service_id = db.Column(db.Integer, db.ForeignKey("services.id"))
+    availability = db.relationship("Availability", backref="customers")
+    services = db.relationship("Services", backref="customers")
+    
 
 with app.app_context():
     db.create_all()
@@ -195,6 +207,10 @@ def business_dashboard():
         flash("Create a business to view the business dashboard", "error")
         return redirect(url_for("profile"))
 
+    availabilities = Availability.query.filter_by(business_id=business.id).all()
+    avail_ids = [a.id for a in availabilities]
+    customers = Customer.query.filter(Customer.availability_id.in_(avail_ids)).all()
+
     if request.method == "POST":
         date_str = request.form.get("date")
         start_time_str = request.form.get("start_time")
@@ -219,7 +235,7 @@ def business_dashboard():
         flash("Availability added!", "success")
         return redirect(url_for("business_dashboard"))
 
-    return render_template("business_dashboard.html")
+    return render_template("business_dashboard.html", customers=customers)
 
 @app.route("/get-availability")
 def get_availability():
@@ -240,6 +256,48 @@ def get_availability():
             "color": "#ff4d4d" if avail.booked else "#4caf50"
         })
     return jsonify(events)
+
+@app.route("/get-business-availability/<int:business_id>")
+def get_business_availability(business_id):
+    availabilities = Availability.query.filter_by(business_id=business_id, booked=False).all()
+    events = []
+    for avail in availabilities:
+        events.append({
+            "id": avail.id,
+            "title": "Free",
+            "start": f"{avail.date}T{avail.start_time}",
+            "end": f"{avail.date}T{avail.end_time}",
+            "color": "#4caf50"
+        })
+    return jsonify(events)
+
+@app.route("/book/<int:business_id>", methods=["GET", "POST"])
+def booking(business_id):
+    business = Business.query.get_or_404(business_id)
+    service = Services.query.filter_by(business_id=business_id).all()
+    if request.method == "POST":
+        availability_id = request.form.get("availability_id")
+        email = request.form.get("email")
+        name = request.form.get("name")
+        surname = request.form.get("surname")
+        service_id = request.form.get("service")
+        availability = Availability.query.get(availability_id)
+        if availability and not availability.booked:
+            customer = Customer(
+                availability_id=availability.id,
+                service_id=service_id,
+                email=email,
+                name=name,
+                surname=surname
+            )
+            db.session.add(customer)
+            availability.booked = True
+            db.session.commit()
+            flash("Booking successful!", "success")
+        else:
+            flash("This slot is already booked.", "error")
+        return redirect(url_for("booking", business_id=business_id))
+    return render_template("booking.html", business=business, service=service)
 
 
 if __name__ == "__main__":

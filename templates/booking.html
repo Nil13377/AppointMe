@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book with {{ business.name }}</title>
+    <link rel="stylesheet" href="/static/booking.css">
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <h1>AppointMe</h1>
+            <p class="subheader">Your personal booking assistant</p>
+        </div>
+        <nav class="header-right">
+            {% if not session.get("user_id") %}
+            <a href="/login" class="login-button">Login/Register</a>
+            {% endif %}
+            {% if session.get("user_id") %}
+            <a href="/profile" class="profile-button">
+                <img src="{{ '/static/images/' ~ session['user_pfp'] if session['user_pfp'] else '/static/images/default.png' }}" alt="Profile Picture">
+            </a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main class="content">
+        <h1 class="business-title">
+            {{ business.name }}
+            <span>Book your appointment</span>
+        </h1>
+        <section class="calendar-section">
+            <div id="calendar"></div>
+        </section>
+
+        <!-- Modal for booking -->
+        <div id="booking-modal">
+            <div class="modal-content">
+                <form id="booking-form" class="booking-form" method="POST">
+                    <input type="hidden" name="availability_id" id="availability-id">
+                    <p id="slot-info"></p>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="surname">Surname</label>
+                        <input type="text" id="surname" name="surname" placeholder="Enter your surname" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="service">Service</label>
+                        <select id="service" name="service" required>
+                            <option value="" disabled selected>Select a service</option>
+                            {% for s in service %}
+                            <option value="{{ s.id }}">{{ s.name }} ({{ s.duration }} min, €{{ s.price }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="button-group">
+                        <button type="submit" class="book-button">Book</button>
+                        <button type="button" class="cancel-button" onclick="document.getElementById('booking-modal').style.display='none'">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <ul class="flash-messages">
+            {% for category, message in messages %}
+            <li class="flash-message {{ category }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 AppointMe. All rights reserved.</p>
+    </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth',
+          events: '/get-business-availability/{{ business.id }}',
+          eventClick: function(info) {
+            var event = info.event;
+            document.getElementById('availability-id').value = event.id;
+            document.getElementById('slot-info').innerText = "Book slot: " + event.start.toLocaleString() + " - " + event.end.toLocaleTimeString();
+            document.getElementById('booking-modal').style.display = 'flex';
+          }
+        });
+        calendar.render();
+      });
+    </script>
+</body>
+</html>

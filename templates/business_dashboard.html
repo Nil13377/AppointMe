@@ -4,50 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Business Dashboard - AppointMe</title>
-    <link rel="stylesheet" href="/static/home.css">
+    <link rel="stylesheet" href="/static/business-dashboard.css">
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
-    <style>
-      .calendar-section {
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-        padding: 2rem;
-        max-width: 900px;
-        margin: 2rem auto;
-      }
-      #calendar {
-        max-width: 800px;
-        margin: 0 auto;
-      }
-      /* Modal styles */
-      #availability-modal {
-        display: none;
-        position: fixed;
-        top: 0; left: 0; width: 100vw; height: 100vh;
-        background: rgba(0,0,0,0.4);
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-      }
-      #availability-modal .modal-content {
-        background: #fff;
-        padding: 2rem;
-        border-radius: 12px;
-        min-width: 300px;
-        text-align: center;
-        position: relative;
-      }
-      #availability-modal label {
-        display: block;
-        margin: 1rem 0 0.5rem;
-      }
-      #availability-modal input[type="time"] {
-        margin-bottom: 1rem;
-      }
-      #availability-modal .cta-button {
-        margin-right: 1rem;
-      }
-    </style>
 </head>
 <body>
     <header class="header">
@@ -56,6 +14,8 @@
             <p class="subheader">Your personal booking assistant</p>
         </div>
         <nav class="header-right">
+            <a href="/" class="dashboard-nav-btn">Home</a>
+            <a href="/logout" class="dashboard-nav-btn">Logout</a>
             <a href="/profile" class="profile-button">
                 <img src="{{ '/static/images/' ~ session['user_pfp'] if session['user_pfp'] else '/static/images/default.png' }}" alt="Profile Picture">
             </a>
@@ -67,6 +27,36 @@
             <h2 style="text-align:center; color:#007aff;">Business Calendar</h2>
             <div id='calendar'></div>
         </section>
+        {% if customers %}
+        <section class="customer-section">
+            <h2>Booked Customers</h2>
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Email</th>
+                    <th>Service</th>
+                    <th>Slot</th>
+                </tr>
+                {% for c in customers %}
+                <tr>
+                    <td>{{ c.name }}</td>
+                    <td>{{ c.surname }}</td>
+                    <td>{{ c.email }}</td>
+                    <td>{{ c.services.name }}</td>
+                    <td>
+                        {% set avail = c.availability %}
+                        {{ avail.date }} {{ avail.start_time }} - {{ avail.end_time }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+    {% else %}
+    <div class="no-customers">
+        <p>No customers have booked yet.</p>
+    </div>
+    {% endif %}
     </main>
 
     <footer class="footer">
@@ -86,6 +76,7 @@
         </form>
       </div>
     </div>
+    
 
     <script>
       document.addEventListener('DOMContentLoaded', function() {

@@ -1,0 +1,240 @@
+:root {
+    --ios-blue: #007AFF;
+    --ios-background: #F2F2F7;
+    --ios-card: #FFFFFF;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) no-repeat fixed;
+    background-size: cover;
+    color: #333;
+}
+
+.header {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 1.5rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-left h1 {
+    margin: 0;
+    color: var(--ios-blue);
+    font-size: 2.2rem;
+    font-weight: 600;
+}
+
+.subheader {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.header-right a {
+    background: var(--ios-blue);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.header-right a:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.content {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    margin-bottom: 5rem;
+}
+
+.create-business-section {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.create-business-section h2 {
+    color: var(--ios-blue);
+    margin: 0 0 1.5rem 0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.create-business-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.create-business-section label {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+    display: block;
+}
+
+.create-business-section input[type="text"],
+.create-business-section input[type="number"],
+.create-business-section textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.9);
+    font-family: inherit;
+}
+
+.create-business-section textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.create-business-section input:focus,
+.create-business-section textarea:focus {
+    outline: none;
+    border-color: var(--ios-blue);
+    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
+}
+
+.services-section {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.services-section h3 {
+    color: var(--ios-blue);
+    margin: 0 0 1rem 0;
+    font-size: 1.2rem;
+}
+
+.service-item {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.service-item input {
+    width: auto;  /* Change from 100% to auto */
+    min-width: 0;  /* Add this to prevent overflow */
+    box-sizing: border-box;  /* Add this to include padding in width calculation */
+}
+
+.service-item input[type="text"] {
+    width: 100%;  /* Keep full width for service name */
+}
+
+.service-item:hover {
+    background: rgba(255, 255, 255, 0.9);
+    transform: translateX(5px);
+}
+
+.add-service-button {
+    background: transparent;
+    color: var(--ios-blue);
+    border: 2px dashed var(--ios-blue);
+    padding: 0.6rem 1.2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.add-service-button:hover {
+    background: rgba(0, 122, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.cta-button {
+    background: var(--ios-blue);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+.cta-button:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 122, 255, 0.3);
+}
+
+.footer {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 1rem;
+    }
+    
+    .header-left h1 {
+        font-size: 1.5rem;
+    }
+    
+    .create-business-section {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+    
+    .service-item {
+        grid-template-columns: 1fr;  /* Stack vertically on mobile */
+        gap: 0.8rem;
+        padding: 1rem;
+    }
+    
+    .service-item input {
+        width: 100%;  /* Full width on mobile */
+    }
+}

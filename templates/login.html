@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - AppointMe</title>
-    <link rel="stylesheet" href="/static/home.css"> <!-- Shared styles -->
-    <link rel="stylesheet" href="/static/login.css"> <!-- Login-specific styles -->
+    <link rel="stylesheet" href="/static/login-register.css">
 </head>
 <body>
     <header class="header">
@@ -30,7 +29,7 @@
         {% endif %}
         {% endwith %}
 
-        <section class="login-form">
+        <section class="auth-form">
             <h2>Login</h2>
             <form action="/login" method="POST">
                 <label for="email">Email</label>
